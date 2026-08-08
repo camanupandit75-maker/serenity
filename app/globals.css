@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --night: #07090f;
+  --deep: #0d1120;
+  --slate: #1a2035;
+  --mist: #e8edf5;
+  --fog: #9ba8bf;
+  --amber: #f0a855;
+  --sage: #6b9e78;
+  --aurora: #7b9ed9;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--mist);
+  background: var(--night);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(240, 168, 85, 0.35);
+  color: var(--mist);
+}
+
+/* Ambient particles */
+.ambient-particle {
+  position: fixed;
+  bottom: -12px;
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background: var(--amber);
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 0;
+  animation-name: particle-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes particle-drift {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.28;
+  }
+  90% {
+    opacity: 0.18;
+  }
+  100% {
+    transform: translateY(-110vh) translateX(18px);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(240, 168, 85, 0.18),
+      0 0 28px rgba(240, 168, 85, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(240, 168, 85, 0.05),
+      0 0 40px rgba(240, 168, 85, 0.22);
+  }
+}
+
+.now-playing-glow {
+  animation: pulse-glow 2.8s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.badge-live {
+  animation: badge-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes toast-slide-up {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 24px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes toast-slide-down {
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, 24px);
+  }
+}
+
+.autoplay-toast-in {
+  animation: toast-slide-up 0.35s ease-out forwards;
+}
+
+.autoplay-toast-out {
+  animation: toast-slide-down 0.3s ease-in forwards;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-particle,
+  .now-playing-glow,
+  .badge-live,
+  .autoplay-toast-in,
+  .autoplay-toast-out {
+    animation: none !important;
+  }
+
+  .autoplay-toast-out {
+    opacity: 0;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
