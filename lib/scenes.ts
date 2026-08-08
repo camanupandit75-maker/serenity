@@ -28,6 +28,8 @@ export const SCENES: Scene[] = [
     thumbUrl:
       "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=800&q=80",
     color: "#7B9ED9",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786205557/grok-video-d6a76fae-a0ac-495c-95d6-b125dc3828eb_pzoljo.mp4",
   },
   {
     id: "ocean",
@@ -94,6 +96,8 @@ export const SCENES: Scene[] = [
     thumbUrl:
       "https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=800&q=80",
     color: "#7BB8B0",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786205626/grok-video-97a6e499-d648-4b79-b404-2c58b4705db8_wdj6jx.mp4",
   },
   {
     id: "sunrise",
