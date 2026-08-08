@@ -16,8 +16,21 @@ function formatCountdown(totalSeconds: number): string {
 }
 
 function youtubeEmbedSrc(ytId: string, loop: boolean): string {
-  const base = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&controls=1`;
+  const base =
+    `https://www.youtube-nocookie.com/embed/${ytId}` +
+    `?autoplay=1&rel=0&modestbranding=1&controls=0&disablekb=1` +
+    `&iv_load_policy=3&fs=0&enablejsapi=1`;
   return loop ? `${base}&loop=1&playlist=${ytId}` : base;
+}
+
+function postYouTubeCommand(
+  iframe: HTMLIFrameElement | null,
+  func: "playVideo" | "pauseVideo" | "mute" | "unMute"
+) {
+  iframe?.contentWindow?.postMessage(
+    JSON.stringify({ event: "command", func, args: "" }),
+    "*"
+  );
 }
 
 export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
@@ -27,6 +40,8 @@ export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
   const [remaining, setRemaining] = useState(0);
   const [total, setTotal] = useState(0);
   const [videoError, setVideoError] = useState(false);
+  const [ytPlaying, setYtPlaying] = useState(true);
+  const [ytMuted, setYtMuted] = useState(false);
 
   const cleanupVideo = useCallback(() => {
     const video = videoRef.current;
@@ -37,6 +52,7 @@ export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
     }
     const iframe = iframeRef.current;
     if (iframe) {
+      postYouTubeCommand(iframe, "pauseVideo");
       iframe.src = "about:blank";
     }
   }, []);
@@ -51,6 +67,8 @@ export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
 
     setLoopEnabled(true);
     setVideoError(false);
+    setYtPlaying(true);
+    setYtMuted(false);
     const seconds = scene.durationMin * 60;
     setTotal(seconds);
     setRemaining(seconds);
@@ -95,10 +113,37 @@ export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
   }, [scene, handleClose]);
 
   useEffect(() => {
-    if (scene?.ytId) return;
+    if (scene?.ytId) {
+      setYtPlaying(true);
+      return;
+    }
     const video = videoRef.current;
     if (video) video.loop = loopEnabled;
   }, [loopEnabled, scene?.ytId]);
+
+  const toggleYtPlay = useCallback(() => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    if (ytPlaying) {
+      postYouTubeCommand(iframe, "pauseVideo");
+      setYtPlaying(false);
+    } else {
+      postYouTubeCommand(iframe, "playVideo");
+      setYtPlaying(true);
+    }
+  }, [ytPlaying]);
+
+  const toggleYtMute = useCallback(() => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    if (ytMuted) {
+      postYouTubeCommand(iframe, "unMute");
+      setYtMuted(false);
+    } else {
+      postYouTubeCommand(iframe, "mute");
+      setYtMuted(true);
+    }
+  }, [ytMuted]);
 
   if (!scene) return null;
 
@@ -159,47 +204,102 @@ export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
       </div>
 
       <div className="flex flex-1 items-center justify-center px-3 py-4 sm:px-6">
-        <div className="relative w-full max-w-[900px] overflow-hidden rounded-2xl border border-white/10 bg-deep shadow-[0_24px_80px_rgba(0,0,0,0.55)] aspect-video">
-          {isYouTube && scene.ytId ? (
-            <iframe
-              ref={iframeRef}
-              key={`${scene.ytId}-${loopEnabled ? "loop" : "once"}`}
-              src={youtubeEmbedSrc(scene.ytId, loopEnabled)}
-              title={scene.name}
-              className="h-full w-full border-0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-            />
-          ) : videoError ? (
-            <div className="absolute inset-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={scene.thumbUrl}
-                alt=""
-                className="h-full w-full object-cover brightness-75"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-night/50 px-4 text-center">
-                <p className="font-display text-2xl text-mist">
-                  Video coming soon
-                </p>
-                <p className="mt-2 font-body text-sm text-fog">
-                  Add {scene.videoFile.replace("/videos/", "")} to /public/videos
-                </p>
+        <div className="w-full max-w-[900px]">
+          <div className="relative aspect-video overflow-hidden rounded-2xl border border-white/10 bg-deep shadow-[0_24px_80px_rgba(0,0,0,0.55)]">
+            {isYouTube && scene.ytId ? (
+              <>
+                <iframe
+                  ref={iframeRef}
+                  key={`${scene.ytId}-${loopEnabled ? "loop" : "once"}`}
+                  src={youtubeEmbedSrc(scene.ytId, loopEnabled)}
+                  title={scene.name}
+                  className="h-full w-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                />
+                {/* Captures clicks — iframe cannot be controlled via host click otherwise */}
+                <button
+                  type="button"
+                  aria-label={ytPlaying ? "Pause" : "Play"}
+                  onClick={toggleYtPlay}
+                  className="absolute inset-0 z-10 cursor-pointer bg-transparent"
+                />
+              </>
+            ) : videoError ? (
+              <div className="absolute inset-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={scene.thumbUrl}
+                  alt=""
+                  className="h-full w-full object-cover brightness-75"
+                />
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-night/50 px-4 text-center">
+                  <p className="font-display text-2xl text-mist">
+                    Video coming soon
+                  </p>
+                  <p className="mt-2 font-body text-sm text-fog">
+                    Add {scene.videoFile.replace("/videos/", "")} to
+                    /public/videos
+                  </p>
+                </div>
               </div>
+            ) : (
+              <video
+                ref={videoRef}
+                key={scene.id}
+                src={scene.videoFile}
+                className="h-full w-full object-cover"
+                autoPlay
+                loop={loopEnabled}
+                controls
+                playsInline
+                muted={false}
+                onError={() => setVideoError(true)}
+              />
+            )}
+          </div>
+
+          {isYouTube && (
+            <div className="mt-3 flex items-center gap-2 rounded-xl border border-white/[0.06] bg-deep/80 px-3 py-2">
+              <button
+                type="button"
+                onClick={toggleYtPlay}
+                aria-label={ytPlaying ? "Pause" : "Play"}
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-night/50 text-mist transition hover:border-amber/40 hover:text-amber"
+              >
+                {ytPlaying ? (
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden>
+                    <rect x="2" y="1" width="3.5" height="12" rx="0.5" />
+                    <rect x="8.5" y="1" width="3.5" height="12" rx="0.5" />
+                  </svg>
+                ) : (
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden>
+                    <path d="M3 1.5v11l9-5.5L3 1.5z" />
+                  </svg>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={toggleYtMute}
+                aria-label={ytMuted ? "Unmute" : "Mute"}
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-night/50 text-mist transition hover:border-amber/40 hover:text-amber"
+              >
+                {ytMuted ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+                    <path d="M11 5L6 9H3v6h3l5 4V5z" />
+                    <path d="M22 9l-6 6M16 9l6 6" />
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden>
+                    <path d="M11 5L6 9H3v6h3l5 4V5z" />
+                    <path d="M15.5 8.5a5 5 0 010 7M18.5 6a9 9 0 010 12" />
+                  </svg>
+                )}
+              </button>
+              <span className="ml-1 font-body text-xs text-fog">
+                {ytPlaying ? "Playing" : "Paused"}
+                {ytMuted ? " · Muted" : ""}
+              </span>
             </div>
-          ) : (
-            <video
-              ref={videoRef}
-              key={scene.id}
-              src={scene.videoFile}
-              className="h-full w-full object-cover"
-              autoPlay
-              loop={loopEnabled}
-              controls
-              playsInline
-              muted={false}
-              onError={() => setVideoError(true)}
-            />
           )}
         </div>
       </div>
