@@ -57,6 +57,8 @@ export const SCENES: Scene[] = [
     thumbUrl:
       "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80",
     color: "#8A9E7B",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786207785/grok-video-9b8d6499-c3ce-492f-93cd-51eacbd4d824_pwmunm.mp4",
   },
   {
     id: "forest",
@@ -70,6 +72,8 @@ export const SCENES: Scene[] = [
     thumbUrl:
       "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80",
     color: "#6B9E78",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786207118/grok-video-b7ec8fc4-223e-4d24-ad74-cefdf7bf21c3_hxt5wz.mp4",
   },
   {
     id: "fireplace",
@@ -83,6 +87,8 @@ export const SCENES: Scene[] = [
     thumbUrl:
       "https://images.unsplash.com/photo-1605648916361-9bc12ad6a569?w=800&q=80",
     color: "#C77B6E",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786206304/grok-video-d19b74ad-1a16-42a9-b59f-ecd34fb6616a_pw1h6d.mp4",
   },
   {
     id: "waterfall",
