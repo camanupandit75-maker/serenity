@@ -10,6 +10,7 @@ export type Scene = {
   thumbUrl: string;
   color: string;
   ytId?: string; // YouTube video ID (optional)
+  videoUrl?: string; // direct MP4 URL (external or CDN)
 };
 
 export type SceneStatus = "active" | "soon" | "past" | "upcoming";
@@ -119,6 +120,8 @@ export const SCENES: Scene[] = [
     thumbUrl:
       "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=800&q=80",
     color: "#8B7ED9",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786204898/grok-video-97a1f42e-a0a8-4f77-b4c8-e222dd354ab8_dxlops.mp4",
   },
 ];
 

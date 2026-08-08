@@ -33,6 +33,25 @@ function postYouTubeCommand(
   );
 }
 
+function ComingSoonFallback({ scene }: { scene: Scene }) {
+  return (
+    <div className="absolute inset-0">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={scene.thumbUrl}
+        alt=""
+        className="h-full w-full object-cover brightness-75"
+      />
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-night/50 px-4 text-center">
+        <p className="font-display text-2xl text-mist">Video coming soon</p>
+        <p className="mt-2 font-body text-sm text-fog">
+          A playable source will appear here shortly.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -73,15 +92,16 @@ export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
     setTotal(seconds);
     setRemaining(seconds);
 
-    if (!scene.ytId) {
-      const video = videoRef.current;
-      if (video) {
+    if (scene.videoUrl) {
+      // Allow the new <video> to mount, then play
+      requestAnimationFrame(() => {
+        const video = videoRef.current;
+        if (!video) return;
         video.loop = true;
-        video.load();
         void video.play().catch(() => {
-          /* autoplay with sound may be blocked; controls remain */
+          /* autoplay may be blocked; native controls remain */
         });
-      }
+      });
     }
   }, [scene]);
 
@@ -112,14 +132,17 @@ export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
     return () => clearInterval(id);
   }, [scene, handleClose]);
 
+  // Loop toggle: HTML5 updates in place; YouTube remounts via iframe key/src
   useEffect(() => {
-    if (scene?.ytId) {
-      setYtPlaying(true);
+    if (!scene) return;
+    if (scene.videoUrl) {
+      if (videoRef.current) videoRef.current.loop = loopEnabled;
       return;
     }
-    const video = videoRef.current;
-    if (video) video.loop = loopEnabled;
-  }, [loopEnabled, scene?.ytId]);
+    if (scene.ytId) {
+      setYtPlaying(true);
+    }
+  }, [loopEnabled, scene]);
 
   const toggleYtPlay = useCallback(() => {
     const iframe = iframeRef.current;
@@ -148,7 +171,8 @@ export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
   if (!scene) return null;
 
   const progress = total > 0 ? remaining / total : 0;
-  const isYouTube = Boolean(scene.ytId);
+  const useDirectVideo = Boolean(scene.videoUrl) && !videoError;
+  const useYouTube = !scene.videoUrl && Boolean(scene.ytId);
 
   return (
     <div
@@ -206,7 +230,19 @@ export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
       <div className="flex flex-1 items-center justify-center px-3 py-4 sm:px-6">
         <div className="w-full max-w-[900px]">
           <div className="relative aspect-video overflow-hidden rounded-2xl border border-white/10 bg-deep shadow-[0_24px_80px_rgba(0,0,0,0.55)]">
-            {isYouTube && scene.ytId ? (
+            {useDirectVideo && scene.videoUrl ? (
+              <video
+                ref={videoRef}
+                key={scene.id}
+                src={scene.videoUrl}
+                autoPlay
+                loop={loopEnabled}
+                playsInline
+                controls
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                onError={() => setVideoError(true)}
+              />
+            ) : useYouTube && scene.ytId ? (
               <>
                 <iframe
                   ref={iframeRef}
@@ -216,7 +252,6 @@ export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
                   className="h-full w-full border-0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 />
-                {/* Captures clicks — iframe cannot be controlled via host click otherwise */}
                 <button
                   type="button"
                   aria-label={ytPlaying ? "Pause" : "Play"}
@@ -224,41 +259,12 @@ export default function VideoModal({ scene, onClose, onOpenScene }: Props) {
                   className="absolute inset-0 z-10 cursor-pointer bg-transparent"
                 />
               </>
-            ) : videoError ? (
-              <div className="absolute inset-0">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={scene.thumbUrl}
-                  alt=""
-                  className="h-full w-full object-cover brightness-75"
-                />
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-night/50 px-4 text-center">
-                  <p className="font-display text-2xl text-mist">
-                    Video coming soon
-                  </p>
-                  <p className="mt-2 font-body text-sm text-fog">
-                    Add {scene.videoFile.replace("/videos/", "")} to
-                    /public/videos
-                  </p>
-                </div>
-              </div>
             ) : (
-              <video
-                ref={videoRef}
-                key={scene.id}
-                src={scene.videoFile}
-                className="h-full w-full object-cover"
-                autoPlay
-                loop={loopEnabled}
-                controls
-                playsInline
-                muted={false}
-                onError={() => setVideoError(true)}
-              />
+              <ComingSoonFallback scene={scene} />
             )}
           </div>
 
-          {isYouTube && (
+          {useYouTube && (
             <div className="mt-3 flex items-center gap-2 rounded-xl border border-white/[0.06] bg-deep/80 px-3 py-2">
               <button
                 type="button"
