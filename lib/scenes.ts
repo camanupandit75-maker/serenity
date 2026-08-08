@@ -117,6 +117,8 @@ export const SCENES: Scene[] = [
     thumbUrl:
       "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&q=80",
     color: "#F0A855",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786208264/grok-video-5eb2da73-3833-4006-81cf-af4bfcdbf6b3_i778ql.mp4",
   },
   {
     id: "aurora",
