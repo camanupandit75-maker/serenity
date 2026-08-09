@@ -166,6 +166,21 @@ export const SCENES: Scene[] = [
     color: "#6B9E5E",
   },
   {
+    id: "lotuspond",
+    name: "Lotus Pond",
+    icon: "🪷",
+    quote: "From muddy waters, the lotus rises pure.",
+    startHour: 11,
+    startMin: 0,
+    durationMin: 20,
+    videoFile: "/videos/lotuspond.mp4",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786258796/grok-video-b9b1611a-4863-483b-b724-c06bbb97c7ab_vh0umt.mp4",
+    thumbUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/so_0/v1786258796/grok-video-b9b1611a-4863-483b-b724-c06bbb97c7ab_vh0umt.jpg",
+    color: "#E8A0C0",
+  },
+  {
     id: "sunrise",
     name: "Golden Sunrise",
     icon: "🌅",
