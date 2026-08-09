@@ -211,6 +211,36 @@ export const SCENES: Scene[] = [
     color: "#A8C4D4",
   },
   {
+    id: "candlelit",
+    name: "Candlelit Cottage",
+    icon: "🕯",
+    quote: "A small warm light, and the whole night waits outside.",
+    startHour: 22,
+    startMin: 0,
+    durationMin: 20,
+    videoFile: "/videos/candlelit.mp4",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786279000/grok-video-1828238f-9d50-4272-8817-f434891969f9_yrfye2.mp4",
+    thumbUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/so_0/v1786279000/grok-video-1828238f-9d50-4272-8817-f434891969f9_yrfye2.jpg",
+    color: "#D4A574",
+  },
+  {
+    id: "milkyway",
+    name: "Milky Way",
+    icon: "✨",
+    quote: "Om — the sound the universe was born from.",
+    startHour: 0,
+    startMin: 0,
+    durationMin: 20,
+    videoFile: "/videos/milkyway.mp4",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786280346/grok-video-ee17566a-8c2d-4fcb-8dcd-db3eba4d8416_wh7qt3.mp4",
+    thumbUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/so_0/v1786280346/grok-video-ee17566a-8c2d-4fcb-8dcd-db3eba4d8416_wh7qt3.jpg",
+    color: "#4A4A8B",
+  },
+  {
     id: "sunrise",
     name: "Golden Sunrise",
     icon: "🌅",
