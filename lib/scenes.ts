@@ -85,7 +85,7 @@ export const SCENES: Scene[] = [
     durationMin: 25,
     videoFile: "/videos/fireplace.mp4",
     thumbUrl:
-      "https://images.unsplash.com/photo-1605648916361-9bc12ad6a569?w=800&q=80",
+      "https://res.cloudinary.com/deivg8apm/video/upload/so_0/v1786206304/grok-video-d19b74ad-1a16-42a9-b59f-ecd34fb6616a_pw1h6d.jpg",
     color: "#C77B6E",
     videoUrl:
       "https://res.cloudinary.com/deivg8apm/video/upload/v1786206304/grok-video-d19b74ad-1a16-42a9-b59f-ecd34fb6616a_pw1h6d.mp4",
@@ -104,6 +104,21 @@ export const SCENES: Scene[] = [
     color: "#7BB8B0",
     videoUrl:
       "https://res.cloudinary.com/deivg8apm/video/upload/v1786205626/grok-video-97a6e499-d648-4b79-b404-2c58b4705db8_wdj6jx.mp4",
+  },
+  {
+    id: "underwater",
+    name: "Coral Reef",
+    icon: "🐠",
+    quote: "Beneath the surface, the world slows down.",
+    startHour: 10,
+    startMin: 30,
+    durationMin: 20,
+    videoFile: "/videos/underwater.mp4",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786247804/grok-video-d664afbf-5189-4862-86b7-cbaf237daffa_ejokdk.mp4",
+    thumbUrl:
+      "https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=800&q=80",
+    color: "#4A9EB5",
   },
   {
     id: "sunrise",
