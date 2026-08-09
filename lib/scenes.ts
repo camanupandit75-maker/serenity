@@ -121,6 +121,51 @@ export const SCENES: Scene[] = [
     color: "#4A9EB5",
   },
   {
+    id: "cherryblossom",
+    name: "Cherry Blossom",
+    icon: "🌸",
+    quote: "Beauty is fleeting. That is why it is beautiful.",
+    startHour: 7,
+    startMin: 30,
+    durationMin: 20,
+    videoFile: "/videos/cherryblossom.mp4",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786256999/grok-video-e0e8face-af57-4b5e-89e5-bb6496be9a17_kj6ojw.mp4",
+    thumbUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/so_0/v1786256999/grok-video-e0e8face-af57-4b5e-89e5-bb6496be9a17_kj6ojw.jpg",
+    color: "#E8A0B0",
+  },
+  {
+    id: "monastery",
+    name: "Himalayan Monastery",
+    icon: "🏔",
+    quote: "In stillness, the sacred reveals itself.",
+    startHour: 5,
+    startMin: 0,
+    durationMin: 20,
+    videoFile: "/videos/monastery.mp4",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786257544/grok-video-6c339b16-7c38-44ea-bf60-0c4d213637f7_toi0ng.mp4",
+    thumbUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/so_0/v1786257544/grok-video-6c339b16-7c38-44ea-bf60-0c4d213637f7_toi0ng.jpg",
+    color: "#C4A882",
+  },
+  {
+    id: "bamboo",
+    name: "Bamboo Grove",
+    icon: "🎋",
+    quote: "Bend but never break. The wisdom of bamboo.",
+    startHour: 9,
+    startMin: 0,
+    durationMin: 20,
+    videoFile: "/videos/bamboo.mp4",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786258149/grok-video-212cf110-2599-4de9-8d18-bc32dee66c55_ucc58k.mp4",
+    thumbUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/so_0/v1786258149/grok-video-212cf110-2599-4de9-8d18-bc32dee66c55_ucc58k.jpg",
+    color: "#6B9E5E",
+  },
+  {
     id: "sunrise",
     name: "Golden Sunrise",
     icon: "🌅",
