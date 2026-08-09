@@ -181,6 +181,36 @@ export const SCENES: Scene[] = [
     color: "#E8A0C0",
   },
   {
+    id: "riceterrace",
+    name: "Rice Terrace",
+    icon: "🌾",
+    quote: "Patience and water shape the mountain.",
+    startHour: 6,
+    startMin: 30,
+    durationMin: 20,
+    videoFile: "/videos/riceterrace.mp4",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786259443/grok-video-ad7004ee-57c8-40e6-b037-51b921c8635e_c585gw.mp4",
+    thumbUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/so_0/v1786259443/grok-video-ad7004ee-57c8-40e6-b037-51b921c8635e_c585gw.jpg",
+    color: "#7BA05B",
+  },
+  {
+    id: "snowforest",
+    name: "Snow Forest",
+    icon: "🌨",
+    quote: "In the silence of snow, the world exhales.",
+    startHour: 7,
+    startMin: 0,
+    durationMin: 20,
+    videoFile: "/videos/snowforest.mp4",
+    videoUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/v1786260086/grok-video-b09cae92-9887-4ec2-a10f-8f113e527097_m0wamg.mp4",
+    thumbUrl:
+      "https://res.cloudinary.com/deivg8apm/video/upload/so_0/v1786260086/grok-video-b09cae92-9887-4ec2-a10f-8f113e527097_m0wamg.jpg",
+    color: "#A8C4D4",
+  },
+  {
     id: "sunrise",
     name: "Golden Sunrise",
     icon: "🌅",
